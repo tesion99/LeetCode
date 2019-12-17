@@ -43,3 +43,33 @@ public:
         subsetcore(nums, cur+1, end, pre, res);
     }
 };
+
+
+// 回溯版本
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        if (nums.empty()) {
+            return vector<vector<int>>();
+        }
+
+        vector<vector<int>> res;
+        vector<int> tmp;
+        backtrace(nums, 0, tmp, res);
+        return res;
+    }
+
+    void backtrace(vector<int>& nums, int start, vector<int>& tmp, vector<vector<int>>& res) {
+        if (start == nums.size()) {
+            res.push_back(tmp);
+            return;
+        }
+
+        // 不放入当前元素
+        backtrace(nums, start+1, tmp, res);
+        // 放入当前元素
+        tmp.push_back(nums[start]);
+        backtrace(nums, start+1, tmp, res);
+        tmp.pop_back();
+    }
+};
