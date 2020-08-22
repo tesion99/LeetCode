@@ -93,3 +93,47 @@ END:
         return down || up || right || left;
     }
 };
+
+
+// 优化代码
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        if (word.empty()) return false;
+
+        int direcs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int r = 0; r < board.size(); ++r) {
+            for (int c = 0; c < board[0].size(); ++c) {
+                if (board[r][c] == word[0]) {
+                    if (helper(board, direcs, r, c, 0, word)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    bool helper(vector<vector<char>>& board, int direcs[4][2], int r, int c, int idx, string& word) {
+        if (r < 0 || r >= board.size() || c < 0 || c >= board[0].size()
+            || board[r][c] == '#' || board[r][c] != word[idx]) {
+            return false;
+        }
+        if (idx == word.size() - 1) {
+            return true;
+        }
+
+        board[r][c] = '#';
+        bool ret = false;
+        for (int i = 0; i < 4; ++i) {
+            int x = direcs[i][0] + r;
+            int y = direcs[i][1] + c;
+            if (helper(board, direcs, x, y, idx + 1, word)) {
+                ret = true;
+                break;
+            }
+        }
+        board[r][c] = word[idx];
+        return ret;
+    }
+};
